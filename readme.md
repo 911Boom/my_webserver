@@ -4,9 +4,9 @@
 - 预计几个月实现网络库，后调优性能
 
 ## 学习路线图
-- [x] Write the press release
-- [ ] Update the website
-- [ ] Contact the media
+- [ ] 学习C++11/14/17新特性
+- [ ] 学习Linux系统编程
+- [ ] 学习网络编程
 
 ## 进度更新
 - 2024.5.15 新建项目
