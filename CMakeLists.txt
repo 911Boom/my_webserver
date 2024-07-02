@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.22.1)
 project(my_webserver)
 SET(CMAKE_CXX_STANDARD 20)
+find_package(Boost REQUIRED COMPONENTS system thread)
+include_directories(${Boost_INCLUDE_DIRS})
+
+include_directories(ShoDo)
+link_directories(ShoDo)
 
 
 add_executable(my_webserver main.cpp
@@ -9,8 +14,22 @@ add_executable(my_webserver main.cpp
         ShoDo/server/InetAddr.h
         ShoDo/server/InetAddr.cpp
         ShoDo/base/TimeStamp.h
+        ShoDo/server/webserver.h
+        ShoDo/Pool/ThreadPool.h
+        ShoDo/Pool/ThreadPool.cpp
+        ShoDo/server/Socket.cpp
+        ShoDo/server/Socket.h
 )
 
-add_executable(TEST ShoDo/tests/test_string_piece.cpp
+add_executable(TEST_STRING_PIECE ShoDo/tests/test_string_piece.cpp
         ShoDo/base/StringPiece.h
         ShoDo/base/types.h)
+
+add_executable(TEST_TIME_STAMP ShoDo/tests/test_TimeStamp.cpp
+        ShoDo/base/TimeStamp.h
+        ShoDo/tests/test_TimeStamp.cpp)
+
+
+add_executable(TRY_ATOMIC ShoDo/tests/try_atomic.cpp)
+target_link_libraries(TRY_ATOMIC Boost::system Boost::thread)
+

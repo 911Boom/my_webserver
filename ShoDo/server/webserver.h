@@ -4,14 +4,13 @@
 
 #ifndef MY_WEBSERVER_WEBSERVER_H
 #define MY_WEBSERVER_WEBSERVER_H
-#include "server/listenaddr.h"
 
-
+#include "server/InetAddr.h"
 
 
 class webserver {
-    listen_addr* addr;
-    int thread_size,open_log,log_level;
+    InetAddr *addr;
+    int thread_size, open_log, log_level;
 
 };
 
