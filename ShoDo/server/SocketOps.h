@@ -2,11 +2,12 @@
 // Created by 着魔之人 on 24-6-26.
 //
 
-#ifndef MY_WEBSERVER_SOCKEROPS_H
-#define MY_WEBSERVER_SOCKEROPS_H
+#ifndef MY_WEBSERVER_SOCKETOPS_H
+#define MY_WEBSERVER_SOCKETOPS_H
 
 #include <arpa/inet.h>
 #include <cassert>
+#include <unistd.h>
 #include "base/types.h"
 
 namespace sockets {
@@ -89,7 +90,37 @@ namespace sockets {
             snprintf(buf + end, size - end, "]:%u", port);
         }
     }
+    void close(int sockfd)
+    {
+        if (::close(sockfd) < 0) {
+//        LOG_SYSERR << "sockets::close";
+        }
+    }
+    void bindAddrSocket(int sockfd, const struct sockaddr *addr) {
+        // 连接 Addr 与 Socket 连接失败放弃
+        int ret = ::bind(sockfd, addr, static_cast<socklen_t>(sizeof(struct sockaddr_in6)));
+        if (ret < 0) {
+//            LOG_SYSFATAL << "sockets::bindAddrSocked";";
+        }
+    }
 
+    void listenSocket(int sockfd) {
+        // 监听 Socket 监听失败则放弃
+        int ret = ::listen(sockfd, SOMAXCONN);
+        if (ret < 0) {
+//            LOG_SYSFATAL << "sockets::listenSocked";
+        }
+    }
+
+    int acceptSocket(int sockfd,struct sockaddr_in6 *addr) {
+        auto addrlen = static_cast<socklen_t>(sizeof *addr);
+        int connfd = ::accept(sockfd, sockaddr_cast(addr), &addrlen);
+        if(connfd < 0 ) {
+            // LOG_FATAL << "sockets::acceptSocket"
+        }
+        return connfd;
+    }
 }
 
-#endif //MY_WEBSERVER_SOCKEROPS_H
+
+#endif //MY_WEBSERVER_SOCKETOPS_H
