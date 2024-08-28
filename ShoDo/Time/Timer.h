@@ -6,22 +6,22 @@
 #define MY_WEBSERVER_TIMER_H
 
 #include "base/TimeStamp.h"
-#include <functional>
 #include <atomic>
 #include <utility>
+#include "Time/Callbacks.h"
 
 class Timer {
 public:
-    using TimerCallback = std::function<void()>;
+
     Timer(TimerCallback cb, TimeStamp when, double interval)
         : callback_(std::move(cb)),
-          endTime_(when),
+          expiration_(when),
           interval_(interval),
           repeat_(interval > 0.0),
           sequence_(++numCreated_)
     { }
     void run() const { callback_(); }
-    [[nodiscard]] TimeStamp endTime() const { return endTime_; }
+    [[nodiscard]] TimeStamp expiration() const { return expiration_; }
     [[nodiscard]] bool repeat() const { return repeat_; }
     [[nodiscard]] int64_t sequence() const { return sequence_; }
     static int64_t numCreated() { return numCreated_; }
@@ -29,7 +29,7 @@ public:
 
 private:
     const TimerCallback callback_;
-    TimeStamp endTime_;
+    TimeStamp expiration_;
     const double interval_{};
     const bool repeat_{};
     const int64_t sequence_{};

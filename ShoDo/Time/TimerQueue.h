@@ -6,20 +6,40 @@
 #define MY_WEBSERVER_TIMERQUEUE_H
 
 #include "base/TimeStamp.h"
-#include "Time/callbacks.h"
+#include "Time/Callbacks.h"
+#include "Time/Timer.h"
+#include "pool/EventLoop.h"
+#include "Time/TimerId.h"
+#include "base/TimeStamp.h"
 #include <set>
 
-class Timer;
+
+
 
 class TimerQueue {
 public:
-    void addTimer(TimerCallback);
-
+    TimerId addTimer(TimerCallback cb, TimeStamp when, double interval);
+    void cancel(TimerId timerId);
 private:
     using Entry = std::pair<TimeStamp,Timer*>;
-    using TimerList = std::set<Entry>;
+    using TimerSet = std::set<Entry>;
+
     using ActiveTimer = std::pair<Timer*,int64_t>;
-    using ActiveTimerList = std::set<ActiveTimer>;
+    using ActiveTimerSet = std::set<ActiveTimer>;
+
+    EventLoop* loop_;
+    const int timerfd_;
+    Channel timerfdChannel_;
+    TimerSet timers_;
+    ActiveTimerSet activeTimers_;
+    ActiveTimerSet cancelingTimers_;
+
+
+    void handleRead();
+    std::vector<Entry> getExpired(TimeStamp now);
+    void reset(const std::vector<Entry>& expired, TimeStamp now);
+    bool insert(Timer* timer);
+
 };
 
 

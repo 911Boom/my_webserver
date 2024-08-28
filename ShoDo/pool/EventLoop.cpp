@@ -44,7 +44,11 @@ void EventLoop::loop() {
 
 
 void EventLoop::runInLoop(EventLoop::Func func) {
-
+    if(inLoopThread()) {
+        func();
+    } else {
+        queueInLoop(std::move(func));
+    }
 }
 
 void EventLoop::abortNotInLoopThread() {

@@ -34,6 +34,7 @@ int main() {
     clock_t start = clock();
     vector<thread> threads(100);
     for (int i = 0; i < 100; i++) threads[i] = thread(click3);
+    threads[0].
     for (auto &t: threads) t.join();
     clock_t end = clock();
     printf("result = %d, time = %lf\n", tot, (double) (end - start) / CLOCKS_PER_SEC);
