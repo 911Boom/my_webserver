@@ -18,6 +18,7 @@
 
 class TimerQueue {
 public:
+    TimerQueue(EventLoop* loop);
     TimerId addTimer(TimerCallback cb, TimeStamp when, double interval);
     void cancel(TimerId timerId);
 private:
@@ -31,9 +32,10 @@ private:
     const int timerfd_;
     Channel timerfdChannel_;
     TimerSet timers_;
+
     ActiveTimerSet activeTimers_;
     ActiveTimerSet cancelingTimers_;
-
+    // std::atomic<bool> callingExpiredTimers_;
 
     void handleRead();
     std::vector<Entry> getExpired(TimeStamp now);

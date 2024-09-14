@@ -89,6 +89,8 @@ public:
         }
         return buf;
     }
+
+    int64_t micSec() const { return micSec_; }
 };
 
 
@@ -100,5 +102,10 @@ inline bool operator==(const TimeStamp &lhs, const TimeStamp &rhs) {
     return lhs.getMicSec() == rhs.getMicSec();
 }
 
+inline TimeStamp addTime(TimeStamp timestamp, double seconds)
+{
+    auto delta = static_cast<int64_t>(seconds * TimeStamp:: kMicSecPerSec);
+    return TimeStamp(timestamp.micSec() + delta);
+}
 
 #endif //MY_WEBSERVER_TIMESTAMP_H

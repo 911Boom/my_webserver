@@ -30,6 +30,7 @@ add_executable(my_webserver main.cpp
         ShoDo/Time/Timer.h
         ShoDo/Time/TimerId.h
         ShoDo/Time/Callbacks.h
+        ShoDo/Time/Callbacks.h
 )
 
 add_executable(TEST_STRING_PIECE ShoDo/tests/test_string_piece.cpp
